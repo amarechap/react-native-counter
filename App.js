@@ -1,124 +1,125 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
 
-/**
- * Counter App Component
- * Features: Increment, Decrement (min 0), Reset, and Milestone at 10.
- */
 export default function App() {
-  // useState stores the current counter value
+  // 1. Initialize State: 'count' holds the number, 'setCount' updates it
   const [count, setCount] = useState(0);
 
-  // Function to add 1 to the counter
-  const increment = () => setCount(count + 1);
-  
-  // Function to subtract 1 (Prevents counter from going below 0)
+  // Function to handle Increment
+  const increment = () => {
+    setCount(count + 1);
+  };
+
+  // Function to handle Decrement (prevents negative numbers)
   const decrement = () => {
     if (count > 0) {
       setCount(count - 1);
     }
   };
 
-  // Function to reset the counter back to 0
-  const reset = () => setCount(0);
+  // Function to handle Reset
+  const reset = () => {
+    setCount(0);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Counter App</Text>
-      
-      <View style={styles.countBox}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Counter App</Text>
+      </View>
+
+      <View style={styles.counterBox}>
+        {/* Display the current count */}
         <Text style={styles.countText}>{count}</Text>
+        
+        {/* 2. Conditional Rendering: Milestone Message appears at 10 */}
+        {count >= 10 && (
+          <Text style={styles.milestoneText}>🎉 Milestone reached! (10+)</Text>
+        )}
       </View>
 
-      {/* Conditional Messages (Requirements) */}
-      {count === 10 && <Text style={styles.milestone}>🎉 You reached 10!</Text>}
-      {count === 0 && <Text style={styles.info}>Counter is at zero.</Text>}
-
-      <View style={styles.buttonRow}>
-        {/* Decrement Button */}
-        <TouchableOpacity style={styles.button} onPress={decrement}>
-          <Text style={styles.buttonText}>-1</Text>
+      <View style={styles.buttonContainer}>
+        {/* 3. Event Handlers: using onPress to trigger functions */}
+        <TouchableOpacity style={[styles.button, styles.decrementBtn]} onPress={decrement}>
+          <Text style={styles.buttonLabel}>-</Text>
         </TouchableOpacity>
 
-        {/* Reset Button */}
-        <TouchableOpacity style={[styles.button, styles.resetBtn]} onPress={reset}>
-          <Text style={styles.buttonText}>Reset</Text>
-        </TouchableOpacity>
-
-        {/* Increment Button */}
-        <TouchableOpacity style={styles.button} onPress={increment}>
-          <Text style={styles.buttonText}>+1</Text>
+        <TouchableOpacity style={[styles.button, styles.incrementBtn]} onPress={increment}>
+          <Text style={styles.buttonLabel}>+</Text>
         </TouchableOpacity>
       </View>
-      
-      <Text style={styles.footer}>Built with React Native & Expo</Text>
-    </View>
+
+      <TouchableOpacity style={styles.resetBtn} onPress={reset}>
+        <Text style={styles.resetText}>Reset Counter</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
 
-// StyleSheet for layout and styling
+// 4. Stylesheet for UI Design
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#f5f5f5',
     alignItems: 'center',
-    backgroundColor: '#f0f2f5',
+    justifyContent: 'center',
+  },
+  header: {
+    marginBottom: 50,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#1c1e21',
-    marginBottom: 20,
+    color: '#333',
   },
-  countBox: {
-    backgroundColor: '#ffffff',
-    padding: 60,
-    borderRadius: 30,
-    marginBottom: 20,
-    elevation: 8, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
+  counterBox: {
+    alignItems: 'center',
+    marginBottom: 40,
   },
   countText: {
-    fontSize: 90,
-    fontWeight: 'bold',
-    color: '#007AFF',
+    fontSize: 100,
+    fontWeight: '200',
+    color: '#2196F3',
   },
-  buttonRow: {
+  milestoneText: {
+    fontSize: 18,
+    color: '#4CAF50',
+    fontWeight: '600',
+    marginTop: 10,
+  },
+  buttonContainer: {
     flexDirection: 'row',
-    marginTop: 20,
+    gap: 20,
   },
   button: {
-    backgroundColor: '#007AFF',
-    padding: 20,
-    marginHorizontal: 8,
-    borderRadius: 12,
-    minWidth: 70,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
     alignItems: 'center',
+    elevation: 3, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+  },
+  incrementBtn: {
+    backgroundColor: '#4CAF50',
+  },
+  decrementBtn: {
+    backgroundColor: '#F44336',
+  },
+  buttonLabel: {
+    fontSize: 40,
+    color: '#fff',
+    fontWeight: '300',
   },
   resetBtn: {
-    backgroundColor: '#FF3B30',
+    marginTop: 50,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  resetText: {
+    fontSize: 16,
+    color: '#888',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
-  milestone: {
-    color: '#4CD964',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  info: {
-    color: '#8e8e93',
-    marginBottom: 10,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 50,
-    color: '#aeaeb2',
-  }
 });
